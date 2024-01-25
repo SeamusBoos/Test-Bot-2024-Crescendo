@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
       double leftSetpoint = shootSpeed;
       double rightSetpoint = shootSpeed;
 
-      m_leftShooterPID.setReference(-leftSetpoint, CANSparkMax.ControlType.kVelocity);
+      m_leftShooterPID.setReference(leftSetpoint, CANSparkMax.ControlType.kVelocity);
       m_rightShooterPID.setReference(rightSetpoint, CANSparkMax.ControlType.kVelocity);
     }
     
