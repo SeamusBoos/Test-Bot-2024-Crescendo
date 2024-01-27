@@ -77,7 +77,6 @@ public class Shoot extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_shooter.setShootSpeed(0);
-        m_shooter.runShooter();
+        m_shooter.stop();
     }
 }

@@ -107,6 +107,11 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    public void stop(){
+      m_RightShooterMotor.set(0);
+      m_LeftShooterMotor.set(0);
+    }
+
     @Override
     public void simulationPeriodic() {
 
