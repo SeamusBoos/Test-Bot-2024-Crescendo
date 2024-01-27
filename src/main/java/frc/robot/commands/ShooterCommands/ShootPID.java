@@ -32,8 +32,8 @@ public class ShootPID extends Command {
     @Override
     public void execute(){
 
-    RightShooterRPM = m_shooter.getRightShooterRPM();
-    LeftShooterRPM = m_shooter.getLeftShooterRPM();
+    RightShooterRPM = m_shooter.getTopShooterRPM();
+    LeftShooterRPM = m_shooter.getBottomShooterRPM();
 
 
     SmartDashboard.putNumber("Right Trigger", RTrigger);

@@ -11,31 +11,35 @@ import frc.robot.maps.TestBotMap;
 
 public class Shooter extends SubsystemBase {
     // motors
-    public final CANSparkMax m_LeftShooterMotor = new CANSparkMax(TestBotMap.ShooterConstants.LeftShooterMotorPort, MotorType.kBrushless);
-    public final CANSparkMax m_RightShooterMotor = new CANSparkMax(TestBotMap.ShooterConstants.RightShooterMotorPort, MotorType.kBrushless);
+    public final CANSparkMax m_TopShooterMotor = new CANSparkMax(TestBotMap.ShooterConstants.TopShooterMotorPort, MotorType.kBrushless);
+    public final CANSparkMax m_BottomShooterMotor = new CANSparkMax(TestBotMap.ShooterConstants.BottomShooterMotorPort, MotorType.kBrushless);
 
     // encoders
-    public final RelativeEncoder m_RightShooterMotorEncoder = m_RightShooterMotor.getEncoder();
-    public final RelativeEncoder m_LeftShooterMotorEncoder = m_LeftShooterMotor.getEncoder();
+    public final RelativeEncoder m_TopShooterMotorEncoder = m_TopShooterMotor.getEncoder();
+    public final RelativeEncoder m_BottomShooterMotorEncoder = m_BottomShooterMotor.getEncoder();
 
     // PID controllers
-    private SparkPIDController m_leftShooterPID = m_LeftShooterMotor.getPIDController();
-    private SparkPIDController m_rightShooterPID = m_RightShooterMotor.getPIDController();
+    private SparkPIDController m_bottomShooterPID = m_BottomShooterMotor.getPIDController();
+    private SparkPIDController m_topShooterPID = m_TopShooterMotor.getPIDController();
 
     public double kP, kI, kD, kIz, kFF, kMaxOut, kMinOut, maxRPM;
-    private int shootSpeed;
+      private int topShootSpeed;
+    private int bottomShootSpeed;
+  
 
     public Shooter() {
-      m_LeftShooterMotor.setInverted(true);
-      m_RightShooterMotor.setInverted(true);
+      m_BottomShooterMotor.setInverted(true);
+      m_TopShooterMotor.setInverted(true);
 
-      m_LeftShooterMotorEncoder.setVelocityConversionFactor(1.0);
-      m_RightShooterMotorEncoder.setVelocityConversionFactor(1.0);
+      m_BottomShooterMotorEncoder.setVelocityConversionFactor(1.0);
+      m_TopShooterMotorEncoder.setVelocityConversionFactor(1.0);
 
-      m_LeftShooterMotorEncoder.setPosition(0);
-      m_RightShooterMotorEncoder.setPosition(0);
+      m_BottomShooterMotorEncoder.setPosition(0);
+      m_TopShooterMotorEncoder.setPosition(0);
 
-      shootSpeed = 2200;
+      bottomShootSpeed = 0;
+      topShootSpeed = 0;
+
 
       // set PID constants
       kP = 6e-5;
@@ -48,44 +52,52 @@ public class Shooter extends SubsystemBase {
       maxRPM = 5700;
 
       // set PID coefficients
-      m_leftShooterPID.setP(kP);
-      m_leftShooterPID.setI(kI);
-      m_leftShooterPID.setD(kD);
-      m_leftShooterPID.setIZone(kIz);
-      m_leftShooterPID.setFF(kFF);
-      m_leftShooterPID.setOutputRange(kMinOut, kMaxOut);
+      m_bottomShooterPID.setP(kP);
+      m_bottomShooterPID.setI(kI);
+      m_bottomShooterPID.setD(kD);
+      m_bottomShooterPID.setIZone(kIz);
+      m_bottomShooterPID.setFF(kFF);
+      m_bottomShooterPID.setOutputRange(kMinOut, kMaxOut);
 
-      m_rightShooterPID.setP(kP);
-      m_rightShooterPID.setI(kI);
-      m_rightShooterPID.setD(kD);
-      m_rightShooterPID.setIZone(kIz);
-      m_rightShooterPID.setFF(kFF);
-      m_rightShooterPID.setOutputRange(kMinOut, kMaxOut);
+      m_topShooterPID.setP(kP);
+      m_topShooterPID.setI(kI);
+      m_topShooterPID.setD(kD);
+      m_topShooterPID.setIZone(kIz);
+      m_topShooterPID.setFF(kFF);
+      m_topShooterPID.setOutputRange(kMinOut, kMaxOut);
 
     }
 
     public void runShooter() {
-      double leftSetpoint = shootSpeed;
-      double rightSetpoint = shootSpeed;
+      double bottomSetpoint = bottomShootSpeed;
+      double topSetpoint = topShootSpeed;
 
-      m_leftShooterPID.setReference(-leftSetpoint, CANSparkMax.ControlType.kVelocity);
-      m_rightShooterPID.setReference(-rightSetpoint, CANSparkMax.ControlType.kVelocity);
+      m_topShooterPID.setReference(-topSetpoint, CANSparkMax.ControlType.kVelocity);
+      m_bottomShooterPID.setReference(-bottomSetpoint, CANSparkMax.ControlType.kVelocity);
     }
     
-    public int getShootSpeed() {
-      return shootSpeed;
+    public int getTopShootSpeed() {
+      return topShootSpeed;
     }
 
-    public void setShootSpeed(int speed) {
-      shootSpeed = speed;
+    public int getBottomShootSpeed() {
+      return bottomShootSpeed;
+    }
+
+    public void setTopShootSpeed(int speed) {
+      topShootSpeed = speed;
+    }
+
+    public void setBottomShootSpeed(int speed) {
+      bottomShootSpeed = speed;
     }
 
     public void dashboardOut() {
-        SmartDashboard.putNumber("Left Shoot Enc", m_LeftShooterMotorEncoder.getPosition());
-        SmartDashboard.putNumber("Right Shoot Enc", m_RightShooterMotorEncoder.getPosition());
+        SmartDashboard.putNumber("Left Shoot Enc", m_BottomShooterMotorEncoder.getPosition());
+        SmartDashboard.putNumber("Right Shoot Enc", m_TopShooterMotorEncoder.getPosition());
 
-        SmartDashboard.putNumber("Left Shoot Vel", m_LeftShooterMotorEncoder.getVelocity());
-        SmartDashboard.putNumber("Right Shoot Vel", m_RightShooterMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("Left Shoot Vel", m_BottomShooterMotorEncoder.getVelocity());
+        SmartDashboard.putNumber("Right Shoot Vel", m_TopShooterMotorEncoder.getVelocity());
     }
 
     /*public void move(double speed) {
@@ -93,12 +105,12 @@ public class Shooter extends SubsystemBase {
         m_LeftShooterMotor.set(-(speed));
       }*/
     
-    public double getRightShooterRPM(){
-      return m_RightShooterMotorEncoder.getVelocity();
+    public double getTopShooterRPM(){
+      return m_TopShooterMotorEncoder.getVelocity();
     }
 
-    public double getLeftShooterRPM(){
-            return m_LeftShooterMotorEncoder.getVelocity();
+    public double getBottomShooterRPM(){
+            return m_BottomShooterMotorEncoder.getVelocity();
 
     }
 
@@ -108,8 +120,8 @@ public class Shooter extends SubsystemBase {
     }
 
     public void stop(){
-      m_RightShooterMotor.set(0);
-      m_LeftShooterMotor.set(0);
+      m_TopShooterMotor.set(0);
+      m_BottomShooterMotor.set(0);
     }
 
     @Override

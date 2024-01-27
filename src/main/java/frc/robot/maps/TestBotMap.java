@@ -12,8 +12,8 @@ public class TestBotMap {
     }
 
     public static final class ShooterConstants {
-        public static final int LeftShooterMotorPort = 5;
-        public static final int RightShooterMotorPort = 6;
+        public static final int BottomShooterMotorPort = 5;
+        public static final int TopShooterMotorPort = 6;
 
         public static final double LeftShooterSpeed = 0.5;
         public static final double RightShooterSpeed = 0.25;

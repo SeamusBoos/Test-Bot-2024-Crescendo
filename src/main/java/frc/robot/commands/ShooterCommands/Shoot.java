@@ -1,6 +1,7 @@
 package frc.robot.commands.ShooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,9 +11,10 @@ public class Shoot extends Command {
     private XboxController driverController = new XboxController(0);
 
     private double RTrigger = 0.0;
-    private double RightShooterRPM = 0.0;
-    private double LeftShooterRPM = 0.0;
-    private int shooterSpeed = 0;
+    private double TopShooterRPM = 0.0;
+    private double BottomShooterRPM = 0.0;
+    private int topShooterSpeed = 0;
+    private int bottomShooterSpeed = 0;
     private boolean readyToShoot = false;
 
 
@@ -33,16 +35,18 @@ public class Shoot extends Command {
 
     @Override
     public void execute() {
-        RightShooterRPM = m_shooter.getRightShooterRPM();
-        LeftShooterRPM = m_shooter.getLeftShooterRPM();
+        TopShooterRPM = m_shooter.getTopShooterRPM();
+        BottomShooterRPM = m_shooter.getBottomShooterRPM();
 
         SmartDashboard.putNumber("Right Trigger", RTrigger);
-        SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
-        SmartDashboard.putNumber("Front Shooter RPM", RightShooterRPM);
-        SmartDashboard.putNumber("Back Shooter RPM", LeftShooterRPM);
+        SmartDashboard.putNumber("Top Shooter Setpoint", topShooterSpeed);
+        SmartDashboard.putNumber("Bottom Shooter Setpoint", bottomShooterSpeed);
+
+        SmartDashboard.putNumber("Top Shooter RPM", TopShooterRPM);
+        SmartDashboard.putNumber("Bottom Shooter RPM", BottomShooterRPM);
         SmartDashboard.putBoolean("Ready To Shoot", readyToShoot);
 
-        if(-m_shooter.getRightShooterRPM()>=shooterSpeed-20 && -m_shooter.getRightShooterRPM()<=shooterSpeed+20){
+        if(-m_shooter.getTopShooterRPM()>=topShooterSpeed-20 && -m_shooter.getTopShooterRPM()<=topShooterSpeed+20 && -m_shooter.getBottomShooterRPM()>=bottomShooterSpeed-20 && -m_shooter.getBottomShooterRPM()<=bottomShooterSpeed+20){
             readyToShoot = true;
         }
         else readyToShoot = false;
@@ -51,29 +55,49 @@ public class Shoot extends Command {
         // press B: minus 500 rpm
         // press A: plus 100 rpm
         // press y: minus 100 rpm
-        if (driverController.getXButtonPressed()){
-            shooterSpeed = shooterSpeed+500;
-        }
-        else if (driverController.getBButtonPressed()){
-            shooterSpeed = shooterSpeed-500;
+        if (driverController.getYButtonPressed()){
+            topShooterSpeed = topShooterSpeed+500;
         }
         else if (driverController.getAButtonPressed()){
-            shooterSpeed = shooterSpeed+100;
+            topShooterSpeed = topShooterSpeed-500;
         }
-        else if (driverController.getYButtonPressed()){
-            shooterSpeed = shooterSpeed-100;
+        else if (driverController.getXButtonPressed()){
+            topShooterSpeed = topShooterSpeed+100;
+        }
+        else if (driverController.getBButtonPressed()){
+            topShooterSpeed = topShooterSpeed-100;
+        }
+        else if (driverController.getPOV() == 0){
+            bottomShooterSpeed = bottomShooterSpeed+500;
+        }
+        else if (driverController.getPOV() == 180){
+            bottomShooterSpeed = bottomShooterSpeed-500;
+        }
+        else if (driverController.getPOV() == 270){
+            bottomShooterSpeed = bottomShooterSpeed+100;
+        }
+        else if (driverController.getPOV() == 90){
+            bottomShooterSpeed = bottomShooterSpeed-100;
         }
 
         // make sure speed doesn't surpass accepted values
-        if (shooterSpeed > 5700) {
-            shooterSpeed = 5700;
+        if (topShooterSpeed > 5700) {
+            topShooterSpeed = 5700;
         }
-        else if (shooterSpeed < -5700) {
-            shooterSpeed = -5700;
+        else if (topShooterSpeed < -5700) {
+            topShooterSpeed = -5700;
+        }
+
+        if (bottomShooterSpeed > 5700) {
+            bottomShooterSpeed = 5700;
+        }
+        else if (bottomShooterSpeed < -5700) {
+            bottomShooterSpeed = -5700;
         }
 
         if (driverController.getRightBumper()) {
-            m_shooter.setShootSpeed(shooterSpeed);
+            m_shooter.setTopShootSpeed(topShooterSpeed);
+            m_shooter.setBottomShootSpeed(bottomShooterSpeed);
             m_shooter.runShooter();
         }
         else{
