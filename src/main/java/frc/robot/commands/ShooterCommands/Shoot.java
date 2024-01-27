@@ -13,6 +13,7 @@ public class Shoot extends Command {
     private double RightShooterRPM = 0.0;
     private double LeftShooterRPM = 0.0;
     private int shooterSpeed = 0;
+    private boolean readyToShoot = false;
 
 
     // RTrigger = driverController.getRightTriggerAxis();
@@ -39,6 +40,12 @@ public class Shoot extends Command {
         SmartDashboard.putNumber("Shooter Speed", shooterSpeed);
         SmartDashboard.putNumber("Front Shooter RPM", RightShooterRPM);
         SmartDashboard.putNumber("Back Shooter RPM", LeftShooterRPM);
+        SmartDashboard.putBoolean("Ready To Shoot", readyToShoot);
+
+        if(m_shooter.getRightShooterRPM()>=shooterSpeed-20 && m_shooter.getRightShooterRPM()<=shooterSpeed+20){
+            readyToShoot = true;
+        }
+        else readyToShoot = false;
 
         // press X: plus 500 rpm
         // press B: minus 500 rpm
@@ -69,9 +76,8 @@ public class Shoot extends Command {
             m_shooter.setShootSpeed(shooterSpeed);
             m_shooter.runShooter();
         }
-        else if (!driverController.getRightBumper()) {
-            m_shooter.setShootSpeed(0);
-            m_shooter.runShooter();
+        else{
+            m_shooter.stop();
         }
     }
 
