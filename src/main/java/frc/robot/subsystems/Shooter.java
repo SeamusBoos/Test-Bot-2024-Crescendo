@@ -39,8 +39,8 @@ public class Shooter extends SubsystemBase {
 
       // set PID constants
       kP = 6e-5;
-      kI = 5e-7;
-      kD = 1e-10;
+      kI = 5e-9;
+      kD = 1e-4;
       kIz = 0;
       kFF = 1.0/5700.0;
       kMaxOut = 1;
@@ -68,8 +68,8 @@ public class Shooter extends SubsystemBase {
       double leftSetpoint = shootSpeed;
       double rightSetpoint = shootSpeed;
 
-      m_leftShooterPID.setReference(leftSetpoint, CANSparkMax.ControlType.kVelocity);
-      m_rightShooterPID.setReference(rightSetpoint, CANSparkMax.ControlType.kVelocity);
+      m_leftShooterPID.setReference(-leftSetpoint, CANSparkMax.ControlType.kVelocity);
+      m_rightShooterPID.setReference(-rightSetpoint, CANSparkMax.ControlType.kVelocity);
     }
     
     public int getShootSpeed() {

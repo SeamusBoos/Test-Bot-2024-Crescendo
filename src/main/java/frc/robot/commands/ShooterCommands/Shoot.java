@@ -42,7 +42,7 @@ public class Shoot extends Command {
         SmartDashboard.putNumber("Back Shooter RPM", LeftShooterRPM);
         SmartDashboard.putBoolean("Ready To Shoot", readyToShoot);
 
-        if(m_shooter.getRightShooterRPM()>=shooterSpeed-20 && m_shooter.getRightShooterRPM()<=shooterSpeed+20){
+        if(-m_shooter.getRightShooterRPM()>=shooterSpeed-20 && -m_shooter.getRightShooterRPM()<=shooterSpeed+20){
             readyToShoot = true;
         }
         else readyToShoot = false;
