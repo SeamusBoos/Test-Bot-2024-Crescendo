@@ -1,4 +1,4 @@
-package frc.robot.maps;
+package frc.robot;
 
 public class TestBotMap {
     public static final class DriveMap {

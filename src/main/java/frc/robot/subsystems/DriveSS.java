@@ -4,7 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.maps.TestBotMap;
+import frc.robot.TestBotMap;
 
 public class DriveSS extends SubsystemBase{
     public final CANSparkMax m_FrontRightMotor = new CANSparkMax(TestBotMap.DriveMap.FrontRightMotorPort, MotorType.kBrushless);

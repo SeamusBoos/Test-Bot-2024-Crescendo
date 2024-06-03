@@ -4,7 +4,7 @@
 
 package frc.robot.commands.DriveModes;
 
-import frc.robot.maps.TestBotMap.OIMap;
+import frc.robot.TestBotMap.OIMap;
 import frc.robot.subsystems.DriveSS;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,8 +36,7 @@ public class TankDrive extends Command {
   public void execute() {
     SmartDashboard.putNumber("Left Joystick", driveController.getLeftY());
     SmartDashboard.putNumber("Right Joystick", driveController.getRightY());
-    m_drivetrain.tankDrive(-driveController.getLeftY(), 
-    -driveController.getRightY());
+    m_drivetrain.tankDrive(-driveController.getLeftY(), driveController.getRightY());
   }
 
   // Called once the command ends or is interrupted.
